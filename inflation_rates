@@ -1,0 +1,78 @@
+library(patchwork)
+library(ggpubr)
+rate<-read.csv("urban.csv")
+dim(rate)
+head(rate)
+summary(rate)
+rtab<-table(cer=rate$Cereals.and.products,egg=rate$Egg)
+rtab
+addmargins(rtab)
+rjan<-rate[rate$Month=="January", ]
+rjan
+som<-subset(rate,select=c("Year","General.index"),subset=(Month=="January"))
+
+som$infl_rate[1]=0
+som$infl_rate[2]=((som$General.index[2]-som$General.index[1])/(som$General.index[1]))*100
+som$infl_rate[3]=((som$General.index[3]-som$General.index[2])/(som$General.index[2]))*100
+som$infl_rate[4]=((som$General.index[4]-som$General.index[3])/(som$General.index[3]))*100
+som$infl_rate[5]=((som$General.index[5]-som$General.index[4])/(som$General.index[4]))*100
+som$infl_rate[6]=((som$General.index[6]-som$General.index[5])/(som$General.index[5]))*100
+som$infl_rate[7]=((som$General.index[7]-som$General.index[6])/(som$General.index[6]))*100
+som$infl_rate[8]=((som$General.index[8]-som$General.index[7])/(som$General.index[7]))*100
+som
+plot1<-plot(x=rjan$Year,y=rjan$Cereals.and.products,xlab="year",ylab="cer",col="red")
+lines(x=rjan$Year,y=rjan$Cereals.and.products, col = "yellow", lwd = 3)
+plot2<-plot(x=rjan$Year,y=rjan$Meat.and.fish,xlab="year",ylab="met",col="blue")
+lines(x=rjan$Year,y=rjan$Meat.and.fish, col = "black", lwd = 3)
+plot3<-plot(x=rjan$Year,y=rjan$Egg,xlab="Year",ylab="Egg",col="black")
+lines(x=rjan$Year,y=rjan$Egg, col = "black", lwd = 3)
+sample_data <- data.frame(x=rjan$Year,
+y1 = rjan$Cereals.and.products,
+y2 = rjan$Meat.and.fish,
+y3 = rjan$Egg,
+y4 = rjan$Milk.and.products,
+y5 = rjan$Oils.and.fats,
+y6 = rjan$Fruits,
+y7 = rjan$Vegetables,
+y8 = rjan$Pulses.and.products)
+lines(sample_data$x, sample_data$y1,ylim=c(100,200))
+lines(sample_data$x, sample_data$y2, col='green', lwd=2)
+lines(sample_data$x, sample_data$y3, col='red', lwd=2)
+lines(sample_data$x, sample_data$y4, col='blue',lwd=2)
+lines(sample_data$x, sample_data$y5, col='violet',lwd=2)
+lines(sample_data$x, sample_data$y6, col='yellow',lwd=2)
+lines(sample_data$x, sample_data$y7, col='pink',lwd=2)
+lines(sample_data$x, sample_data$y8, col='brown',lwd=2)
+
+plot1<-plot(x=rjan$Year,y=rjan$Milk.and.products,xlab="year",ylab="Milk",col="red")
+lines(x=rjan$Year,y=rjan$Milk.and.products, col = "yellow", lwd = 3)
+plot1<-plot(x=rjan$Year,y=rjan$Oils.and.fats,xlab="year",ylab="Oils and fats",col="red")
+lines(x=rjan$Year,y=rjan$Oils.and.fats, col = "yellow", lwd = 3)
+barplot(rjan$Fruits,main="Bar plot of Fruits inflation",xlab="year",ylab="Fruits")
+barplot(rjan$Vegetables,main="Bar plot of vegetables inflation",xlab="year",ylab="vegetables")
+barplot(rjan$Pulses.and.products,main="Bar plot of pulses inflatition",xlab="year",ylab="pulses")
+boxplot(rjan$Sugar.and.Confectionery,xlab="Year",ylab="sugar")
+hist(rjan$Spices,xlab="Spices",ylab="mode")
+hist(rjan$Non.alcoholic.beverages,ylab="Non alcoholic beverages",xlab="mode")
+relation<-lm(rjan$Cereals.and.products~rjan$Year)
+a<-data.frame(2022)
+result<-predict(relation,a)
+print(result)
+#cereals and products
+linear<-na.omit(rjan)
+x=linear$Year
+y=linear$Cereals.and.products
+
+relation<-lm(y~x)
+a<-data.frame(2022)
+result<-predict(relation,a)
+(result)
+#meat and fish
+NA
+x=rjan$Year
+y=rjan$Meat.and.fish
+
+relation<-lm(y~x)
+a<-data.frame(2022)
+result<-predict(relation,a)
+result
